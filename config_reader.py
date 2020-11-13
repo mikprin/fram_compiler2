@@ -15,7 +15,7 @@ class Config:
         return text
 
     def __parse_config(self, config: str):
-        reg = re.compile(r'^\s*([\d\w]+\s*):\s*([\d\w\.]+)$', flags=re.MULTILINE)
+        reg = re.compile(r'^\s*([\d\w]+)\s*:\s*([\d\w\.]+)\s*$', flags=re.MULTILINE)
         matches = reg.findall(config)
         return matches
     
