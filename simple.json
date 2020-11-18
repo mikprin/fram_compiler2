@@ -1,0 +1,13 @@
+{
+    "central":{
+        "cell": "fram"
+    },
+    "left": [
+        {"unit": "wdriver"},
+        [{"unit": "decoder"}, {"unit": "decoder"}],
+        {"unit": "predecoder"}
+    ],
+    "right":[{"unit": "pldriver"}],
+    "top": [{"unit": "bldriver"}],
+    "bottom": [{"unit": "amplifier"}]
+}
