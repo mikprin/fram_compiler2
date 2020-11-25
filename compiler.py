@@ -19,7 +19,7 @@ if __name__ ==  '__main__':
 	if args.verbose != self.Config.debug_level:
 		config = args.verbose
 
-    arch = config.load_arch()
+
 
 
     end_time = time.perf_counter()
@@ -31,3 +31,5 @@ class Fram_Compiler:
     def __init__(config, *args , **kwargs):
         self.config = config
         self.args = args
+
+        arch = config.load_arch()
