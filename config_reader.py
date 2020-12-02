@@ -56,12 +56,8 @@ class Config:
         return json.loads(value)
 
     def load_arch(self):
-        return Architecture(self.arch)
+        return Architecture(self.arch, self.word_size, self.num_words)
 
     def __init__(self, filename: str):
         config = self.__open_config(filename)
         self.__parse_config(config)
-
-
-# Test
-conf = Config("test.conf")
