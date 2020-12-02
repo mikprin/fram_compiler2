@@ -19,8 +19,8 @@ class FramCompiler:
     def __init__(self, config, *args, **kwargs) -> None:
         self.config = config
         self.args = args
-        self.config = Config(args.configuration)
-        self.arch = config.load_arch()
+        self.config = Config(self.config)
+        self.arch = self.config.load_arch()
 
 if __name__ == '__main__':
     start_time = time.perf_counter()
@@ -32,4 +32,4 @@ if __name__ == '__main__':
     compiler = FramCompiler(args.configuration)
     end_time = time.perf_counter()
     compilation_time = end_time - start_time
-
+    print("Compilation finished in " + str(compilation_time))

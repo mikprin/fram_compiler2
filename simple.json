@@ -1,6 +1,20 @@
 {
     "central": {
-        "cell": "fram"
+        "cell": "fram",
+        "lines": [
+            {
+                "name": "wl",
+                "type": "horizontal"
+            },
+            {
+                "name": "pl",
+                "type": "horizontal"
+            },
+            {
+                "name": "bl",
+                "type": "vertical"
+            }
+        ]
     },
     "left": [
         {
@@ -19,7 +33,7 @@
                 "mirror": true,
                 "special_type": "decoder"
             },
-            "other_connections": {
+            "array_interconnections": {
                 "adress": {
                     "name": "decoder_adress",
                     "type": "bus_connection",
@@ -53,7 +67,7 @@
             "unit": "sen_amplifier",
             "to": "bl",
             "with": "in",
-            "other_connections": {
+            "array_interconnections": {
                 "sen_en": {
                     "name": "sen_en",
                     "type": "common",

@@ -2,18 +2,40 @@ from os import name
 from sys import exec_prefix
 from typing import Any
 import sys
-
+from enum import Enum
 
 class Core:
     name = ""
     word_size = 1
     num_words = 1
+    lines = []
 
     def __init__(self, core_description: dict, word_size: int, num_words: int) -> None:
         descr = core_description['central']
         self.name = descr['cell']
         self.word_size = word_size
         self.num_words = num_words
+        self.lines = descr["lines"]
+
+    class LineType(Enum):
+        VERTICAL = 1
+        HORIZONTAL = 2
+
+    class CoreLine:
+        name = ""
+        type = 0
+        def __init__(self, line: dict) -> None:
+            self.name = line["name"]
+            if line["type"] == 'horizontal': self.type = self.LineType.HORIZONTAL
+            elif line["type"] == 'vertical' : self.type = self.LineType.VERTICAL
+            else:
+                print("Unknown line type in " + self.name + " inside central cell")
+                sys.exit(1)
+
+
+
+    def setup_lines(self, lines: slice) -> slice:
+        return [self.CoreLine(x) for x in lines]
 
 
 class Unit:
@@ -26,31 +48,36 @@ class Unit:
 
     def __init__(self, unit_description: Any) -> None:
         self.name = unit_description['unit']
-        try: self.connect_to = unit_description['to']
+        try:
+            self.connect_to = unit_description['to']
         except KeyError:
-            print("Error: child connection for unit "+self.name+" not specified. Please check arch file.")
+            print("Error: child pin connection for unit " +
+                  self.name+" not specified. Please check arch file.")
             sys.exit(1)
-        try: self.connect_with = unit_description['with']
+        try:
+            self.connect_with = unit_description['with']
         except KeyError:
-            print("Error: parent connection for unit "+self.name+" not specified. Please check arch file.")
+            print("Error: parent connection pin for unit " +
+                  self.name+" not specified. Please check arch file.")
             sys.exit(1)
         self.mirror = unit_description.get('other').get('mirror')
         self.special_type = unit_description.get('other').get('special_type')
-        other = unit_description.get('other_connections')
+        other = unit_description.get('array_interconnections')
         if other != None:
             self.other = self.setup_other_connections(other)
 
-    def setup_other_connections(self, other_connections: dict) -> dict:
-        return {x: OptionalConnection(other_connections[x]) for x in other_connections}
+    class OptionalConnection:
+        name = ""
+        type = ""
+        point = ""
 
-class OptionalConnection:
-    name = ""
-    type = ""
-    point = ""
-    def __init__(self, connection) -> None:
-        self.name = connection['name']
-        self.type = connection['type']
-        if self.type == 'common':
-            self.point = connection['common_net']
-        if self.type == 'bus_connection':
-            self.point = connection['common_bus']
+        def __init__(self, connection) -> None:
+            self.name = connection['name']
+            self.type = connection['type']
+            if self.type == 'common':
+                self.point = connection['common_net']
+            if self.type == 'bus_connection':
+                self.point = connection['common_bus']
+
+    def setup_other_connections(self, other_connections: dict) -> dict:
+        return {x: self.OptionalConnection(other_connections[x]) for x in other_connections}
