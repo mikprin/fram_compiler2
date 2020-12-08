@@ -11,6 +11,13 @@
             "program": "compiler.py",
             "console": "integratedTerminal",
             "args": ["test.conf"]
+        },
+        {
+            "name": "Python: Parser",
+            "type": "python",
+            "request": "launch",
+            "program": "spice_parser.py",
+            "console": "integratedTerminal"
         }
     ]
 }
