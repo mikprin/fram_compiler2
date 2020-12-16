@@ -6,7 +6,6 @@ import re
 class SubCktParser:
     subs: list
 
-
     def open_sp_file(self, path: str) -> str:
         with open(path) as sp:
             return sp.read()
@@ -20,7 +19,8 @@ class SubCktParser:
 
     def get_subckts_content(self, sp_text: str, hats: list) -> list:
         print(hats)
-        comp_head = [r"((subckt)|(SUBCKT))\s+" + h[0] + r"\s+" + h[1] + r"$(.+)ends\s+"+h[0] for h in hats]
+        comp_head = [r"((subckt)|(SUBCKT))\s+" + h[0] + r"\s+" +
+                     h[1] + r"$(.+)ends\s+"+h[0] for h in hats]
         rex = [re.compile(i, re.M | re.S) for i in comp_head]
         conts = [r.findall(sp_text) for r in rex]
         c = [c[0][3][1::] for c in conts]
@@ -43,21 +43,20 @@ class SubCktParser:
         for s in range(len(hats)):
             subs.append(self.make_single_sub(hats[s], pc[s]))
         return subs
-        
+
     def make_single_sub(self, hat, lines):
         pl = []
         for i in range(len(lines)):
             pl.append(ElementParser(lines[i]).get_element())
         sub = spice_elements.SubCktDecl(hat[0], hat[1], pl)
         return sub
-    
+
     def __init__(self, filename: str) -> None:
         f = self.open_sp_file(filename)
         self.subs = self.parse_subs(f)
-    
+
     def get_subs(self):
         return self.subs
-
 
 
 class ElementParser:
@@ -105,9 +104,10 @@ class ElementParser:
 
     def __init__(self, descr: str) -> None:
         self.element = self.parse_element(descr)
-    
+
     def get_element(self):
         return self.element
+
 
 # Test
 parser = SubCktParser("decoder_test.sp").get_subs()
