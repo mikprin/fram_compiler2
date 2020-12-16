@@ -4,7 +4,7 @@ import re
 
 
 class SubCktParser:
-    subs: list
+    subs: list(spice_elements.SubCktDecl)
 
     def open_sp_file(self, path: str) -> str:
         with open(path) as sp:
@@ -55,7 +55,7 @@ class SubCktParser:
         f = self.open_sp_file(filename)
         self.subs = self.parse_subs(f)
 
-    def get_subs(self):
+    def get_subs(self) -> list(spice_elements.SubCktDecl):
         return self.subs
 
 
