@@ -1,7 +1,11 @@
-from arch import Core, Unit
 import json
 
+from arch import Core, Unit
+
+
 class Architecture:
+    arch_name: str
+
     top: list
     bottom: list
     right: list
@@ -20,3 +24,6 @@ class Architecture:
         self.bottom = [Unit(x) for x in arch['bottom']]
         self.left = [Unit(x) for x in arch['left']]
         self.right = [Unit(x) for x in arch['right']]
+
+    def import_ckt_packages():
+        pass

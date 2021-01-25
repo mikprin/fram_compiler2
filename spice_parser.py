@@ -1,24 +1,25 @@
-from os import stat
-import spice_elements
 import re
+
+import spice_elements
 
 
 class SubCktParser:
-    subs: list(spice_elements.SubCktDecl)
+
+    #list of subcircuits
+    subs: list[spice_elements.SubCktDecl]
 
     def open_sp_file(self, path: str) -> str:
         with open(path) as sp:
             return sp.read()
 
-    def parse_subckt_decls(self, sp_text: str) -> list:
+    def parse_subckt_decls(self, sp_text: str) -> list[str]:
         subckt_re = re.compile(
             r"((subckt)|(SUBCKT))\s+([\w]+)\s+((\w+(\s+)?)+)$", re.M)
         res = subckt_re.findall(sp_text)
         hats = [(i[3], i[4]) for i in res]
         return hats
 
-    def get_subckts_content(self, sp_text: str, hats: list) -> list:
-        print(hats)
+    def get_subckts_content(self, sp_text: str, hats: list) -> list[str]:
         comp_head = [r"((subckt)|(SUBCKT))\s+" + h[0] + r"\s+" +
                      h[1] + r"$(.+)ends\s+"+h[0] for h in hats]
         rex = [re.compile(i, re.M | re.S) for i in comp_head]
@@ -26,7 +27,7 @@ class SubCktParser:
         c = [c[0][3][1::] for c in conts]
         return c
 
-    def parse_terminals(self, hats: list) -> list:
+    def parse_terminals(self, hats: list) -> list[list[str]]:
         new_hats = [[h[0], h[1].split()] for h in hats]
         return new_hats
 
@@ -44,7 +45,7 @@ class SubCktParser:
             subs.append(self.make_single_sub(hats[s], pc[s]))
         return subs
 
-    def make_single_sub(self, hat, lines):
+    def make_single_sub(self, hat, lines) -> spice_elements.SubCktDecl:
         pl = []
         for i in range(len(lines)):
             pl.append(ElementParser(lines[i]).get_element())
@@ -55,7 +56,7 @@ class SubCktParser:
         f = self.open_sp_file(filename)
         self.subs = self.parse_subs(f)
 
-    def get_subs(self) -> list(spice_elements.SubCktDecl):
+    def get_subs(self) -> list:
         return self.subs
 
 
@@ -110,5 +111,5 @@ class ElementParser:
 
 
 # Test
-parser = SubCktParser("decoder_test.sp").get_subs()
-print(parser)
+# parser = SubCktParser("decoder_test.sp").get_subs()
+# print(parser)

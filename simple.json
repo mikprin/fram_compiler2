@@ -26,8 +26,8 @@
             }
         },
         {
-            "unit": "decoder",
-            "to": "wl",
+            "unit": "decoder_stage",
+            "to": "WL1",
             "with": "out",
             "other": {
                 "mirror": true,
@@ -37,7 +37,7 @@
                 "adress": {
                     "name": "decoder_adress",
                     "type": "bus_connection",
-                    "common_bus": "adress"
+                    "common_bus": "address"
                 }
             }
         }

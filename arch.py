@@ -1,16 +1,40 @@
-from os import name
-from sys import exec_prefix
-from typing import Any
 import sys
 from enum import Enum
 
-class Core:
-    name = ""
-    word_size = 1
-    num_words = 1
-    lines = []
+from ckt_package import CircuitPackage
+
+
+class ArchUnit:
+    name: str
+    pkg: CircuitPackage
+
+    def create_cp(self) -> None:
+        """
+        Creates circuit package for this unit
+        """
+        self.pkg = CircuitPackage(self.name)
+
+
+class Core(ArchUnit):
+    word_size: int = 1
+    num_words: int = 1
+    lines: list[str] = []
 
     def __init__(self, core_description: dict, word_size: int, num_words: int) -> None:
+        """
+        Creates core with specified parameters
+
+        Parameters
+        ----------
+        core_description: dict
+            Core description from architecture specification
+        ----------
+        word_size: int
+            Word length
+        ----------
+        num_words: int
+            Amount of words
+        """
         descr = core_description['central']
         self.name = descr['cell']
         self.word_size = word_size
@@ -24,42 +48,43 @@ class Core:
     class CoreLine:
         name = ""
         type = 0
+
         def __init__(self, line: dict) -> None:
             self.name = line["name"]
-            if line["type"] == 'horizontal': self.type = self.LineType.HORIZONTAL
-            elif line["type"] == 'vertical' : self.type = self.LineType.VERTICAL
+            if line["type"] == 'horizontal':
+                self.type = self.LineType.HORIZONTAL
+            elif line["type"] == 'vertical':
+                self.type = self.LineType.VERTICAL
             else:
-                print("Unknown line type in " + self.name + " inside central cell")
+                print("Unknown line type in " +
+                      self.name + " inside central cell")
                 sys.exit(1)
-
-
 
     def setup_lines(self, lines: slice) -> slice:
         return [self.CoreLine(x) for x in lines]
 
 
-class Unit:
-    name = ""
+class Unit(ArchUnit):
     mirror = False
     connect_to = ""
     connect_with = ""
     special_type = ""
     other = dict()
 
-    def __init__(self, unit_description: Any) -> None:
+    def __init__(self, unit_description: dict) -> None:
         self.name = unit_description['unit']
         try:
             self.connect_to = unit_description['to']
         except KeyError:
             print("Error: child pin connection for unit " +
                   self.name+" not specified. Please check arch file.")
-            sys.exit(1)
+            sys.exit(-1)
         try:
             self.connect_with = unit_description['with']
         except KeyError:
             print("Error: parent connection pin for unit " +
                   self.name+" not specified. Please check arch file.")
-            sys.exit(1)
+            sys.exit(-1)
         self.mirror = unit_description.get('other').get('mirror')
         self.special_type = unit_description.get('other').get('special_type')
         other = unit_description.get('array_interconnections')

@@ -1,6 +1,7 @@
-from arch_reader import Architecture
 import argparse
 import time
+
+from arch_reader import Architecture
 from config_reader import Config
 
 # parser = argparse.ArgumentParser(description="Pass memory config")
@@ -16,11 +17,12 @@ class FramCompiler:
     config: Config
     arch: Architecture
 
-    def __init__(self, config, *args, **kwargs) -> None:
+    def __init__(self, config) -> None:
         self.config = config
         self.args = args
         self.config = Config(self.config)
         self.arch = self.config.load_arch()
+    
 
 if __name__ == '__main__':
     start_time = time.perf_counter()
