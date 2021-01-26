@@ -1,5 +1,5 @@
 // sense_amp subcuircuit
-subckt sense_amp in ref seb nb nt vdd gnd
+.subckt sen_amplifier in ref seb nb nt vdd gnd
 M3 (nb seb gnd gnd) nsvt25 w=0.4 l=0.28
 M2 (gnd seb nt gnd) nsvt25 w=0.4 l=0.28
 M1 (nt nb gnd gnd) nsvt25 w=0.4 l=0.28
@@ -9,4 +9,4 @@ M7 (net25 ref net33 vdd) psvt25 w=0.4 l=0.28
 M6 (net29 in net25 vdd) psvt25 w=0.4 l=0.28
 M5 (nt nb net33 vdd) psvt25 w=0.4 l=0.28
 M4 (net29 nt nb vdd) psvt25 w=0.4 l=0.28
-ends sense_amp
+.ends sen_amplifier

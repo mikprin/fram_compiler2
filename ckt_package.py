@@ -1,13 +1,14 @@
+from guide import Guide
 from spice_parser import SubCktParser
 from spice_elements import SubCktDecl
 
 
 class CircuitPackage:
     name: str
-    terminals: list[str]
+    terminals: list[str] = []
 
     spice_inst: SubCktDecl
-    spice_subckts: list[SubCktDecl]
+    spice_subckts: list[SubCktDecl] = []
 
     gds_inst: object
 
@@ -17,8 +18,7 @@ class CircuitPackage:
 
         Parameters
         ----------
-        path: str
-            path to SPICE file
+            path: str - path to SPICE file
         """
         parser = SubCktParser(path).get_subs()
         for i in parser:
@@ -31,6 +31,10 @@ class CircuitPackage:
     def load_gds_ckt(self, path: str) -> None:
         """
         Loads GDS file and parses into this package
+
+        Parameters
+        ----------
+            path: str - path to GDS file
         """
         pass
 
@@ -40,5 +44,7 @@ class CircuitPackage:
         """
         super().__init__()
         self.name = name
-        self.load_spice_ckt(loc)
-        self.load_gds_ckt(loc)
+        if loc == None:
+            loc = Guide.locate(name)
+        self.load_spice_ckt(loc + name + ".sp")
+        self.load_gds_ckt(loc + name + ".gds")

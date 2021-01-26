@@ -9,19 +9,23 @@ class SubCktParser:
     subs: list[spice_elements.SubCktDecl]
 
     def open_sp_file(self, path: str) -> str:
-        with open(path) as sp:
-            return sp.read()
+        try:
+            with open(path) as sp:
+                return sp.read()
+        except FileNotFoundError:
+            print("File "+path+" not found")
+            return
 
     def parse_subckt_decls(self, sp_text: str) -> list[str]:
         subckt_re = re.compile(
-            r"((subckt)|(SUBCKT))\s+([\w]+)\s+((\w+(\s+)?)+)$", re.M)
+            r"(\.?(subckt)|(SUBCKT))\s+([\w]+)\s+((\w+(\s+)?)+)$", re.M)
         res = subckt_re.findall(sp_text)
         hats = [(i[3], i[4]) for i in res]
         return hats
 
     def get_subckts_content(self, sp_text: str, hats: list) -> list[str]:
-        comp_head = [r"((subckt)|(SUBCKT))\s+" + h[0] + r"\s+" +
-                     h[1] + r"$(.+)ends\s+"+h[0] for h in hats]
+        comp_head = [r"(\.?(subckt)|(SUBCKT))\s+" + h[0] + r"\s+" +
+                     h[1] + r"$(.+)((\.ends)|(\.ENDS))\s+"+h[0] for h in hats]
         rex = [re.compile(i, re.M | re.S) for i in comp_head]
         conts = [r.findall(sp_text) for r in rex]
         c = [c[0][3][1::] for c in conts]
@@ -111,5 +115,5 @@ class ElementParser:
 
 
 # Test
-# parser = SubCktParser("decoder_test.sp").get_subs()
+# parser = SubCktParser("./simple/sen_amplifier.sp").get_subs()
 # print(parser)

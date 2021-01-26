@@ -3,8 +3,8 @@ import sys
 
 class SubCktDecl:
     name: str
-    terminals: slice
-    elements: slice
+    terminals: list[str]
+    elements: list
 
     def __init__(self, name, terminals, elements) -> None:
         self.name = name
@@ -17,18 +17,18 @@ class SubCktDecl:
 
         Parameters
         ----------
-        connections: dict[str, str]
+            connections: dict[str, str]
             Connections list styled like: terminal->wire
 
         Optional
         --------
-        instance_index: int
+            instance_index: int
             Instance index for generating names inside parental subcircuit.
             Default value: 0
 
         Returns
         -------
-        Generated string
+            str Generated string
         """
         # Making terminals list
         new_terminals: list[str] = []
@@ -41,9 +41,20 @@ class SubCktDecl:
         new_name = "X"+str(instance_index)
         nested_subckt_instance = NestedSubCkt(new_name, self.name, new_terminals)
         return nested_subckt_instance.synthesize_declaration()
-    
 
+    def declare(self) -> str:
+        """
+        Creates subcircuit declaration
 
+        Returns
+        -------
+            str Generated declaration text
+        """
+        hat = ".subckt " + self.name + ' '.join(self.terminals) + "\n"
+        for decl in self.elements:
+            hat += decl.synthesize_declaration() + "\n"
+        hat += ".ends " + self.name
+        return hat
 
 class NestedElement:
     name: str
@@ -69,6 +80,7 @@ class NestedElement:
         -------
             None
         """
+        super().__init__()
         self.name = name
         self.module = module
         self.terminals = terminals
@@ -84,13 +96,7 @@ class NestedElement:
         synthesized_string: str = self.name+ " ("
         term_len: int = len(self.terminals)
         i: int = 0
-        for term in self.terminals:
-            synthesized_string += term
-            if i == term_len-1:
-                synthesized_string += ') '
-            else:
-                synthesized_string += ' '
-            i += 1
+        synthesized_string += ' '.join(self.terminals) + ') '
         synthesized_string += self.module
         return synthesized_string
 
@@ -101,7 +107,6 @@ class Mosfet(NestedElement):
     length: int
 
     def __init__(self, name: str, module: str, terminals: list[str], width: int, length: int) -> None:
-
         super().__init__(name, module, terminals)
         self.width = width
         self.length = length

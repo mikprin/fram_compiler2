@@ -12,7 +12,7 @@ class ArchUnit:
         """
         Creates circuit package for this unit
         """
-        self.pkg = CircuitPackage(self.name)
+        self.pkg = CircuitPackage(self.name, None)
 
 
 class Core(ArchUnit):
