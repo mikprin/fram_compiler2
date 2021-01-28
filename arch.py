@@ -13,6 +13,11 @@ class ArchUnit:
         Creates circuit package for this unit
         """
         self.pkg = CircuitPackage(self.name, None)
+    
+    def print_unit_config(self) -> str:
+        config = "Name: {0}".format(self.name)
+        config += self.pkg.print_pkg_info()
+        return config
 
 
 class Core(ArchUnit):
@@ -62,6 +67,17 @@ class Core(ArchUnit):
 
     def setup_lines(self, lines: slice) -> slice:
         return [self.CoreLine(x) for x in lines]
+
+    def print_unit_config(self) -> str:
+        info = super().print_unit_config()
+        info += "Word size: "+str(self.word_size) + "\t"
+        info += "Amount of words: "+str(self.num_words) + "\t"
+        info += "Lines: \n"
+        for i in self.lines:
+            for j in i:
+                info += j + " : " + i[j]+"\n"
+        return info
+
 
 
 class Unit(ArchUnit):

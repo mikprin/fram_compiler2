@@ -55,6 +55,12 @@ class SubCktDecl:
             hat += decl.synthesize_declaration() + "\n"
         hat += ".ends " + self.name
         return hat
+    
+    def print_decl_info(self) -> str:
+        info = "\nSubcircuit name: {}\tTerminals: {}\t Elements:\n".format(self.name, ', '.join(self.terminals))
+        for i in self.elements:
+            info += i.print_description()
+        return info
 
 class NestedElement:
     name: str
@@ -99,6 +105,10 @@ class NestedElement:
         synthesized_string += ' '.join(self.terminals) + ') '
         synthesized_string += self.module
         return synthesized_string
+    
+    def print_description(self) -> str:
+        info = "Name: {}\tModule: {}\tTerminals: {}\t".format(self.name, self.module, ', '.join(self.terminals))
+        return info
 
 
 
@@ -153,6 +163,11 @@ class Mosfet(NestedElement):
         synth_string += ('w=' + str(self.width)+ ' ')
         synth_string += ('l=' + str(self.length))
         return synth_string
+    
+    def print_description(self) -> str:
+        info = super().print_description()
+        info += "Width: {}\tLength: {}\n".format(str(self.width), str(self.length))
+        return info
 
 
 class NestedSubCkt(NestedElement):
@@ -180,3 +195,6 @@ class NestedSubCkt(NestedElement):
             None
         """
         super().__init__(name=name, module=module, terminals=terminals)
+    
+    def print_description(self) -> str:
+        return super().print_description() + "\n"

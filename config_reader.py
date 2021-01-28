@@ -25,9 +25,13 @@ class Config:
     # Make pdf
     pdf_output = False
 
+    #aux_filename
+    filename: str
+
     def __open_config(self, filename: str):
         config = configparser.ConfigParser()
         config.read(filename)
+        self.filename = filename
         return config
 
     def __parse_config(self, config: ConfigParser):
@@ -61,3 +65,7 @@ class Config:
     def __init__(self, filename: str):
         config = self.__open_config(filename)
         self.__parse_config(config)
+    
+    def print_data(self) -> None:
+        report_template = "Config:\n\tName: {0}\n\tWord size: {1}\n\tAmount of words: {2}\n\tOutput file: {3}\n\tArch name: {4}\n\tPhysical sinulation file: {5}\n\tCheck LVC: {6}\n\tCheck DRC: {7}\n\tPDF Output: {8}\n\n"
+        return report_template.format(self.filename, self.word_size, self.num_words, self.output_name, self.arch, self.phys_sim, self.lvc, self.drc, self.pdf_output)

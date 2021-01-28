@@ -1,3 +1,4 @@
+from os import name
 from guide import Guide
 from spice_parser import SubCktParser
 from spice_elements import SubCktDecl
@@ -21,6 +22,7 @@ class CircuitPackage:
             path: str - path to SPICE file
         """
         parser = SubCktParser(path).get_subs()
+        self.spice_subckts = []
         for i in parser:
             if i.name == self.name:
                 self.spice_inst = i
@@ -48,3 +50,12 @@ class CircuitPackage:
             loc = Guide.locate(name)
         self.load_spice_ckt(loc + name + ".sp")
         self.load_gds_ckt(loc + name + ".gds")
+    
+    def print_pkg_info(self) -> str:
+        info = "\nPackage name: {}\tTerminals: {}".format(self.name, self.terminals)
+        if hasattr(self, 'spice_inst'): info += "\nMain SPICE subcircuit: " + self.spice_inst.print_decl_info()
+        if self.spice_subckts != None:
+            info += "\nSPICE cubcircuits:\n"
+            for i in self.spice_subckts:
+                info += i.print_decl_info()
+        return info
