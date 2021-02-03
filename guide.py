@@ -2,4 +2,4 @@ class Guide:
 
     @staticmethod
     def locate(name: str):
-        return "./simple/"
+        return "./netlist/"

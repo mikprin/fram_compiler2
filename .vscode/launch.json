@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "compiler.py",
             "console": "integratedTerminal",
-            "args": ["test.conf"]
+            "args": ["netlist.conf", "-v 1"]
         },
         {
             "name": "Python: Parser",

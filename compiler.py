@@ -37,7 +37,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     compiler = FramCompiler(args.configuration)
-    compiler.print_compiler_data()
+    if args.verbose == 1: compiler.print_compiler_data()
     end_time = time.perf_counter()
     compilation_time = end_time - start_time
     print("Compilation finished in " + str(compilation_time))

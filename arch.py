@@ -101,8 +101,13 @@ class Unit(ArchUnit):
             print("Error: parent connection pin for unit " +
                   self.name+" not specified. Please check arch file.")
             sys.exit(-1)
-        self.mirror = unit_description.get('other').get('mirror')
-        self.special_type = unit_description.get('other').get('special_type')
+        p_other = unit_description.get('other')
+        if p_other == None:
+            self.mirror = False
+            self.special_type = False
+        else:
+            self.mirror = p_other.get('mirror')
+            self.special_type = p_other.get('special_type')
         other = unit_description.get('array_interconnections')
         if other != None:
             self.other = self.setup_other_connections(other)

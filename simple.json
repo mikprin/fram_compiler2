@@ -27,8 +27,8 @@
         },
         {
             "unit": "decoder_stage",
-            "to": "WL1",
-            "with": "out",
+            "to": "out",
+            "with": "WL1",
             "other": {
                 "mirror": true,
                 "special_type": "decoder"

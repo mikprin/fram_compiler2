@@ -115,11 +115,17 @@ class NestedElement:
 class Mosfet(NestedElement):
     width: int
     length: int
+    fingers_amount: int
+    mult: int
+    srcefirst: int
 
-    def __init__(self, name: str, module: str, terminals: list[str], width: int, length: int) -> None:
+    def __init__(self, name: str, module: str, terminals: list[str], width: int, length: int, nfing: int = None, mult: int = None, srcefirst: int = None) -> None:
         super().__init__(name, module, terminals)
         self.width = width
         self.length = length
+        self.fingers_amount = nfing
+        self.mult = mult
+        self.srcefirst = srcefirst
 
     def modify_width(self, new_width: int) -> None:
         """
@@ -162,11 +168,18 @@ class Mosfet(NestedElement):
         synth_string = super().synthesize_declaration()
         synth_string += ('w=' + str(self.width)+ ' ')
         synth_string += ('l=' + str(self.length))
+        if self.fingers_amount != None: synth_string += (' nfing=' + str(self.fingers_amount))
+        if self.mult != None: synth_string += (' mult='+str(self.mult))
+        if self.srcefirst != None: synth_string += (' srcefirst='+str(self.srcefirst))
         return synth_string
     
     def print_description(self) -> str:
         info = super().print_description()
-        info += "Width: {}\tLength: {}\n".format(str(self.width), str(self.length))
+        info += "Width: {}\tLength: {}\t".format(str(self.width), str(self.length))
+        if self.fingers_amount != None: info += ('Fingers: ' + str(self.fingers_amount) + '\t')
+        if self.mult != None: info += ('Mult: '+str(self.mult) + '\t')
+        if self.srcefirst != None: info += ('Source First: '+str(self.srcefirst) + '\n')
+        info += "\n"
         return info
 
 

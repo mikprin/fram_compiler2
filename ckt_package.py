@@ -59,3 +59,6 @@ class CircuitPackage:
             for i in self.spice_subckts:
                 info += i.print_decl_info()
         return info
+    
+    def instanciate(self, connections: dict[str, str], instance_index: int = 0) -> str:
+        return self.spice_inst.instantiate(connections=connections, instance_index=instance_index)

@@ -72,7 +72,7 @@ class ElementParser:
         ident = type_estimator.findall(description)[0][1]
         if ident == 'M':
             return self.parse_mosfet(description)
-        if ident == 'X':
+        if ident == 'I':
             return self.parse_nested(description)
 
     def parse_nested(self, descr: str):
