@@ -3,8 +3,8 @@
         "cell": "memory_cell",
         "lines": [
             {
-                "name": "wl",
-                "type": "vertical"
+                "name": "wn",
+                "type": "horizontal"
             },
             {
                 "name": "pl",
@@ -16,13 +16,7 @@
             }
         ]
     },
-    "left": [
-        {
-            "unit": "off_driver",
-            "to": "bl",
-            "with": "BL"
-        }
-    ],
+    "left": [],
     "right": [
         {
             "unit": "fram_cells5_1u_invertor_schematic",
@@ -30,7 +24,13 @@
             "with": "out"
         }
     ],
-    "top": [],
+    "top": [
+        {
+            "unit": "off_driver",
+            "to": "bl",
+            "with": "BL"
+        }
+    ],
     "bottom": [
         {
             "unit": "sense_amp",

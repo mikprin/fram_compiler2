@@ -18,12 +18,13 @@ class ArchUnit:
         config = "Name: {0}".format(self.name)
         config += self.pkg.print_pkg_info()
         return config
+    
 
 
 class Core(ArchUnit):
     word_size: int = 1
     num_words: int = 1
-    lines: list[str] = []
+    lines: list = []
 
     def __init__(self, core_description: dict, word_size: int, num_words: int) -> None:
         """
@@ -44,7 +45,7 @@ class Core(ArchUnit):
         self.name = descr['cell']
         self.word_size = word_size
         self.num_words = num_words
-        self.lines = descr["lines"]
+        self.lines = self.setup_lines(descr["lines"])
 
     class LineType(Enum):
         VERTICAL = 1
@@ -57,9 +58,9 @@ class Core(ArchUnit):
         def __init__(self, line: dict) -> None:
             self.name = line["name"]
             if line["type"] == 'horizontal':
-                self.type = self.LineType.HORIZONTAL
+                self.type = Core.LineType.HORIZONTAL
             elif line["type"] == 'vertical':
-                self.type = self.LineType.VERTICAL
+                self.type = Core.LineType.VERTICAL
             else:
                 print("Unknown line type in " +
                       self.name + " inside central cell")
@@ -74,8 +75,10 @@ class Core(ArchUnit):
         info += "Amount of words: "+str(self.num_words) + "\t"
         info += "Lines: \n"
         for i in self.lines:
-            for j in i:
-                info += j + " : " + i[j]+"\n"
+            tp = '?'
+            if i.type == Core.LineType.HORIZONTAL: tp = "H"
+            if i.type == Core.LineType.VERTICAL: tp = "V"
+            info += i.name + " : " + tp+"\n"
         return info
 
 

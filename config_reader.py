@@ -46,7 +46,7 @@ class Config:
         self.word_size = int(config['word_size'])
         self.num_words = int(config['num_words'])
         self.output_name = config['output_name']
-        self.arch = config['arch']
+        self.arch = config['arch']+'.json'
 
     def __parse_physics(self, config: SectionProxy):
         self.phys_sim = config['phys_sim']

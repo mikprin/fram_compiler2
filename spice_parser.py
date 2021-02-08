@@ -39,7 +39,13 @@ class SubCktParser:
         split_lines = [l.splitlines() for l in lines]
         return split_lines
 
+    def remove_newlines(self, f: str) -> str:
+        new_line = r"\\\s+"
+        reg = re.sub(new_line, ' ', f)
+        return reg
+
     def parse_subs(self, f: str) -> list:
+        f = self.remove_newlines(f)
         hats = self.parse_subckt_decls(f)
         content = self.get_subckts_content(f, hats)
         hats = self.parse_terminals(hats)
@@ -79,14 +85,15 @@ class ElementParser:
         name = self.parse_ident(descr)
         terminals = self.parse_terminals(descr)
         module = self.parse_module(descr)
-        return spice_elements.NestedSubCkt(name, module=module, terminals=terminals)
+        params = self.parse_params(descr)
+        return spice_elements.NestedSubCkt(name, module=module, terminals=terminals, params=params)
 
     def parse_mosfet(self, descr: str):
         name = self.parse_ident(descr)
         terminals = self.parse_terminals(descr)
         module = self.parse_module(descr)
         params = self.parse_params(descr)
-        return spice_elements.Mosfet(name, module, terminals, params['w'], params['l'])
+        return spice_elements.Mosfet(name, module, terminals, params=params)
 
     def parse_ident(self, descr: str):
         name = re.findall(r"^\s*(\w([\d\w]+))", descr)[0][0][1]
@@ -101,7 +108,7 @@ class ElementParser:
         return module
 
     def parse_params(self, descr: str):
-        params = re.findall(r"(\w+)\=([\w\.]+)", descr)
+        params = re.findall(r"(\w+)\=([\w\.\-]+)", descr)
         dic = dict()
         for i in params:
             dic[i[0]] = float(i[1])
@@ -115,5 +122,5 @@ class ElementParser:
 
 
 # Test
-# parser = SubCktParser("./simple/sen_amplifier.sp").get_subs()
+# parser = SubCktParser("./netlist/memory_cell.sp").get_subs()
 # print(parser)

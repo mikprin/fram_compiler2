@@ -1,7 +1,6 @@
-from io import SEEK_CUR
 import json
 
-from arch import Core, Unit
+from arch_unit import Core, Unit
 
 
 class Architecture:
@@ -58,3 +57,35 @@ class Architecture:
                 arch_config += i.print_unit_config()
         arch_config += "\n\n"
         return arch_config
+
+    def evaluate_core_lines(self, h: int, v: int) -> list:
+        connections = []
+        for i in range(v):
+            w_connections = []
+            for j in range(h):
+                new_connection = dict()
+                for l in self.central.lines:
+                    if l.type == Core.LineType.HORIZONTAL:
+                        new_connection[l.name] = l.name+'_h_'+str(i)
+                    if l.type == Core.LineType.VERTICAL:
+                        new_connection[l.name] = l.name+'_v_'+str(j)
+                w_connections.append(new_connection)
+            connections.append(w_connections)
+        return connections
+    
+    def evaluate_side_lines(self, side: list[Unit], n: int, t: Core.LineType) -> list:
+        sub = '?'
+        if t == Core.LineType.HORIZONTAL:
+            sub = '_h_'
+        if t == Core.LineType.VERTICAL:
+            sub = '_v_'
+        layers = []
+        for i in side:
+            layer_connections = []
+            for j in range(n):
+                interlayer_dict = dict()
+                interlayer_dict[i.connect_with] = i.connect_to + sub + str(j)
+                layer_connections.append(interlayer_dict)
+            layers.append(layer_connections)
+        return layers
+            

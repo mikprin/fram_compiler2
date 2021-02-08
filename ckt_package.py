@@ -9,7 +9,7 @@ class CircuitPackage:
     terminals: list[str] = []
 
     spice_inst: SubCktDecl
-    spice_subckts: list[SubCktDecl] = []
+    spice_subckts: set[SubCktDecl]
 
     gds_inst: object
 
@@ -28,7 +28,7 @@ class CircuitPackage:
                 self.spice_inst = i
                 self.terminals = i.terminals
             else:
-                self.spice_subckts.append(i)
+                self.spice_subckts.add(i)
 
     def load_gds_ckt(self, path: str) -> None:
         """
@@ -44,7 +44,7 @@ class CircuitPackage:
         """
         Creates new package with name name from folder loc
         """
-        super().__init__()
+        self.spice_subckts = set()
         self.name = name
         if loc == None:
             loc = Guide.locate(name)
@@ -60,5 +60,5 @@ class CircuitPackage:
                 info += i.print_decl_info()
         return info
     
-    def instanciate(self, connections: dict[str, str], instance_index: int = 0) -> str:
+    def instantiate(self, connections: dict[str, str], instance_index: int = 0) -> str:
         return self.spice_inst.instantiate(connections=connections, instance_index=instance_index)
