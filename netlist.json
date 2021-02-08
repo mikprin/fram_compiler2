@@ -1,0 +1,41 @@
+{
+    "central": {
+        "cell": "memory_cell",
+        "lines": [
+            {
+                "name": "wn",
+                "type": "horizontal"
+            },
+            {
+                "name": "pl",
+                "type": "horizontal"
+            },
+            {
+                "name": "bl",
+                "type": "vertical"
+            }
+        ]
+    },
+    "left": [],
+    "right": [
+        {
+            "unit": "fram_cells5_1u_invertor_schematic",
+            "to": "pl",
+            "with": "out"
+        }
+    ],
+    "top": [
+        {
+            "unit": "off_driver",
+            "to": "bl",
+            "with": "BL"
+        }
+    ],
+    "bottom": [
+        {
+            "unit": "sense_amp",
+            "to": "bl",
+            "with": "in"
+        }
+    ]
+}
